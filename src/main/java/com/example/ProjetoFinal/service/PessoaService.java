@@ -10,6 +10,8 @@ import com.example.ProjetoFinal.entity.*;
 import com.example.ProjetoFinal.infra.exception.Bairro.NotFoundBairroException;
 import com.example.ProjetoFinal.infra.exception.Pessoa.NotFoundPessoaException;
 import com.example.ProjetoFinal.infra.exception.Pessoa.PessoaInsertException;
+import com.example.ProjetoFinal.infra.handler.utils.validation.validarEndereco;
+import com.example.ProjetoFinal.infra.handler.utils.validation.validarPessoa;
 import com.example.ProjetoFinal.repository.BairroRepository;
 import com.example.ProjetoFinal.repository.EnderecoRepository;
 import com.example.ProjetoFinal.repository.PessoaRepository;
@@ -92,6 +94,9 @@ public class PessoaService {
     }
 
     public List<Pessoa> salvarPessoa(PessoaDto pessoaDto) {
+
+        validarPessoa.validarEntradaPessoa(pessoaDto);
+
         // Criar e salvar pessoa
         Pessoa pessoa = new Pessoa();
         pessoa.setNome(pessoaDto.getNome());
@@ -110,6 +115,9 @@ public class PessoaService {
 
         // Criar e salvar endereços relacionados
         List<Endereco> enderecos = pessoaDto.getEnderecos().stream().map(enderecoRequest -> {
+
+            validarEndereco.validarEntradaEndereco(enderecoRequest);
+
             Endereco endereco = new Endereco();
             endereco.setPessoa(pessoa);
             endereco.setNomeRua(enderecoRequest.getNomeRua());
@@ -128,6 +136,10 @@ public class PessoaService {
     }
 
     public List<Pessoa> atualizarPessoa(PessoaDto pessoaDto) {
+
+        validarPessoa.validarEntradaPessoa(pessoaDto);
+        validarPessoa.validarCodigoPessoa(pessoaDto);
+
         // Criar e salvar pessoa
         Pessoa pessoa = new Pessoa();
         pessoa.setCodigoPessoa(pessoaDto.getCodigoPessoa());
@@ -147,10 +159,14 @@ public class PessoaService {
             }
         });
 
-
+        // Atualizar endereços
+        enderecoRepository.deleteByPessoaCodigoPessoa(pessoa.getCodigoPessoa());
 
         // Criar e salvar endereços relacionados
         List<Endereco> enderecos = pessoaDto.getEnderecos().stream().map(enderecoRequest -> {
+
+            validarEndereco.validarEntradaEndereco(enderecoRequest);
+
             Endereco endereco = new Endereco();
             endereco.setCodigoEndereco(enderecoRequest.getCodigoEndereco());
             endereco.setPessoa(pessoa);

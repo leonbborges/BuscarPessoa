@@ -33,6 +33,7 @@ public class MunicipioService {
     }
 
     public List<Municipio> buscarMunicipioPorAtributos(Long codigoUF, String nome, Integer status) {
+        System.out.println("passei por aqui");
         return municipioRepository.searchByParameters(codigoUF, nome, status);
     }
 
@@ -41,6 +42,7 @@ public class MunicipioService {
     }
 
     public List<Municipio> salvarMunicipio(MunicipioDto mDto) {
+        validarMunicipio.validarEntradaMunicipio(mDto);
 
         UF ufRetorno = ufRepository.findById(mDto.getCodigoUF())
                 .orElseThrow(() -> new NotFoundUFException("não foi possivel encontrar uma UF como o " +
@@ -50,12 +52,12 @@ public class MunicipioService {
                 mDto.getNome(),
                 mDto.getStatus());
 
-        validarMunicipio.validarEntradaMunicipio(municipio);
+
 
         municipioRepository.findOneByNome(municipio.getNome()).ifPresent(existingMunicipio -> {
             throw new MunicipioInsertException(
                     "Não foi possível incluir Municipio no banco de dados. Motivo: já existe um registro de Municipio " +
-                            "com o nome" + municipio.getNome() + " cadastrado(a) no banco de dados."
+                            "com o nome " + municipio.getNome() + " cadastrado(a) no banco de dados."
             );
         });
 
@@ -65,6 +67,8 @@ public class MunicipioService {
     }
 
     public List<Municipio> AtualizarMunicipio(MunicipioDto mDto) {
+        validarMunicipio.validarEntradaMunicipio(mDto);
+        validarMunicipio.validarCogigoMunicipio(mDto);
 
         UF ufRetorno = ufRepository.findById(mDto.getCodigoUF())
                 .orElseThrow(() -> new UFNullParamException("não foi possivel encontrar uma UF como o " +
@@ -75,8 +79,6 @@ public class MunicipioService {
                 mDto.getNome(),
                 mDto.getStatus());
 
-        validarMunicipio.validarEntradaMunicipio(municipio);
-        validarMunicipio.validarCogigoMunicipio(municipio);
 
         municipioRepository.findOneByNome(municipio.getNome()).ifPresent(existingMunicipio -> {
             if (!existingMunicipio.getCodigoMunicipio().equals(mDto.getCodigoUF())) {

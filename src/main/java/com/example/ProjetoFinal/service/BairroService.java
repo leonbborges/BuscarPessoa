@@ -42,6 +42,7 @@ public class BairroService {
 
     public List<Bairro> salvarBairro(BairroDto bairroDto) {
 
+        validarBairro.validarEntradaBairro(bairroDto);
         Municipio municipioRetorno = municipioRepository.findById(bairroDto.getCodigoMunicipio())
                 .orElseThrow(() -> new NotFoundBairroException
                         ("não foi possivel encontrar um Municipio como o " +
@@ -50,8 +51,6 @@ public class BairroService {
         Bairro bairro = new Bairro(municipioRetorno,
                 bairroDto.getNome(),
                 bairroDto.getStatus());
-
-        validarBairro.validarEntradaBairro(bairro);
 
         bairroRepository.findByMunicipioCodigoMunicipioAndNome(bairro.getMunicipio().getCodigoMunicipio(),
                 bairro.getNome()).ifPresent(existingBairro -> {
@@ -69,6 +68,9 @@ public class BairroService {
 
     public List<Bairro> AtualizarBairro(BairroDto bairroDto) {
 
+        validarBairro.validarEntradaBairro(bairroDto);
+        validarBairro.validarCogigoMunicipio(bairroDto);
+
         Municipio municipioRetorno = municipioRepository.findById(bairroDto.getCodigoMunicipio())
                 .orElseThrow(() -> new NotFoundMunicipioException("não foi possivel encontrar uma UF como o " +
                         "codigo disponibilizado"));
@@ -77,9 +79,6 @@ public class BairroService {
                 municipioRetorno,
                 bairroDto.getNome(),
                 bairroDto.getStatus());
-
-        validarBairro.validarEntradaBairro(bairro);
-        validarBairro.validarCogigoMunicipio(bairro);
 
         bairroRepository.findByMunicipioCodigoMunicipioAndNome(bairro.getMunicipio().getCodigoMunicipio()
                 , bairro.getNome()).ifPresent(existingBairro -> {

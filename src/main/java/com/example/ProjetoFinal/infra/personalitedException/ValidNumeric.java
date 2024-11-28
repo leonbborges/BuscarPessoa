@@ -9,12 +9,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 
-@Constraint(validatedBy = StatusValidator.class) // A classe que vai implementar a lógica de validação
-@Target({ElementType.PARAMETER, ElementType.FIELD})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface ValidStatus {
+@Constraint(validatedBy = ValidNumericValidator.class) // Classe validadora
+@Target({ElementType.FIELD, ElementType.PARAMETER}) // Pode ser usada em campos e parâmetros
+@Retention(RetentionPolicy.RUNTIME) // Disponível em tempo de execução
+public @interface ValidNumeric {
 
-    String message() default "O valor de status não é válido";
+    String message() default "O valor deve ser numérico válido.";
 
     Class<?>[] groups() default {};
 

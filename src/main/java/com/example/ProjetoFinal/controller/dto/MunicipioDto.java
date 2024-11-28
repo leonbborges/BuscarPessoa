@@ -1,6 +1,7 @@
 package com.example.ProjetoFinal.controller.dto;
 
 import lombok.Data;
+import lombok.NonNull;
 
 @Data
 public class MunicipioDto {

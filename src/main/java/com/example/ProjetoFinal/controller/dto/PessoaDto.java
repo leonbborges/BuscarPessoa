@@ -1,6 +1,6 @@
 package com.example.ProjetoFinal.controller.dto;
 
-import com.example.ProjetoFinal.infra.personalitedException.ValidStatus;
+import com.example.ProjetoFinal.infra.personalitedException.ValidNumeric;
 import jakarta.validation.constraints.Digits;
 import lombok.Data;
 
@@ -8,21 +8,19 @@ import java.util.List;
 
 @Data
 public class PessoaDto {
-    @Digits(integer = 9, fraction = 0, message = "O campo 'codigoPessoa' deve ser um número inteiro.")
+
     private Long codigoPessoa;
 
     private String nome;
 
     private String sobrenome;
 
-    @Digits(integer = 3, fraction = 0, message = "O campo 'idade' deve ser um número inteiro.")
     private Integer idade;
 
     private String login;
 
     private String senha;
 
-    @ValidStatus
     private Integer status;
 
     private List<EnderecoDto> enderecos;

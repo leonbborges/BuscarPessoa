@@ -2,7 +2,9 @@ package com.example.ProjetoFinal.controller;
 
 import com.example.ProjetoFinal.controller.dto.MunicipioDto;
 import com.example.ProjetoFinal.entity.Municipio;
+import com.example.ProjetoFinal.infra.personalitedException.ValidNumeric;
 import com.example.ProjetoFinal.service.MunicipioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,15 +38,15 @@ public class MunicipioController {
 
     @GetMapping
     public ResponseEntity<?> listarMunicipiosFiltrados(
-            @RequestParam(required = false) Long codigoMunicipio,
-            @RequestParam(required = false) Long CodigoUF,
+            @Valid @ValidNumeric @RequestParam(required = false) Long codigoMunicipio,
+            @Valid @ValidNumeric @RequestParam(required = false) Long codigoUf,
             @RequestParam(required = false) String nome,
-            @RequestParam(required = false) Integer status){
+            @Valid @ValidNumeric @RequestParam(required = false) Integer status){
 
         List<Municipio> municipios =  new ArrayList<>();
 
         if(codigoMunicipio != null){
-            Municipio municipio = municipioService.buscarMunicipios(codigoMunicipio, CodigoUF, nome, status);
+            Municipio municipio = municipioService.buscarMunicipios(codigoMunicipio, codigoUf, nome, status);
 
             MunicipioDto municipioDto = new MunicipioDto(municipio.getCodigoMunicipio(),
                     municipio.getUf().getCodigoUF(),
@@ -53,9 +55,10 @@ public class MunicipioController {
 
             return ResponseEntity.ok(municipioDto);
         }
-        else if (nome != null || CodigoUF != null || status != null) {
-            municipios = municipioService.buscarMunicipioPorAtributos(CodigoUF,nome,status);
-        } else {
+        else if (codigoUf != null || nome != null || status != null) {
+            municipios = municipioService.buscarMunicipioPorAtributos(codigoUf,nome,status);
+        }
+        else {
             municipios = municipioService.buscarTodosOsMunicipios();
         }
 

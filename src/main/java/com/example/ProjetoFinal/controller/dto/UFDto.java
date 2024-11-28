@@ -1,6 +1,5 @@
 package com.example.ProjetoFinal.controller.dto;
 
-import com.example.ProjetoFinal.infra.personalitedException.ValidStatus;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.Data;

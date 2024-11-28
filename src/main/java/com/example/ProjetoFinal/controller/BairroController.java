@@ -2,7 +2,9 @@ package com.example.ProjetoFinal.controller;
 
 import com.example.ProjetoFinal.controller.dto.BairroDto;
 import com.example.ProjetoFinal.entity.Bairro;
+import com.example.ProjetoFinal.infra.personalitedException.ValidNumeric;
 import com.example.ProjetoFinal.service.BairroService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +22,10 @@ public class BairroController {
 
     @GetMapping
     public ResponseEntity<?> listarBairrosFiltrados(
-            @RequestParam(required = false) Long codigoBairro,
-            @RequestParam(required = false) Long codigoMunicipio,
+            @Valid @ValidNumeric @RequestParam(required = false) Long codigoBairro,
+            @Valid @ValidNumeric @RequestParam(required = false) Long codigoMunicipio,
             @RequestParam(required = false) String nome,
-            @RequestParam(required = false) Integer status){
+            @Valid @ValidNumeric @RequestParam(required = false) Integer status){
 
         List<Bairro> bairros =  new ArrayList<>();
 

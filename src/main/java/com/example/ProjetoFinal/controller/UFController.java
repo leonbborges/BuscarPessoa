@@ -2,7 +2,9 @@ package com.example.ProjetoFinal.controller;
 
 import com.example.ProjetoFinal.controller.dto.UFDto;
 import com.example.ProjetoFinal.entity.UF;
+import com.example.ProjetoFinal.infra.personalitedException.ValidNumeric;
 import com.example.ProjetoFinal.service.UFService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,8 +40,8 @@ public class UFController {
     public ResponseEntity<?> listarUFsFiltrados(
             @RequestParam(required = false) String sigla,
             @RequestParam(required = false) String nome,
-            @RequestParam(required = false) Long codigoUF,
-            @RequestParam(required = false) Integer status){
+            @Valid @ValidNumeric @RequestParam(required = false) Long codigoUF,
+            @Valid @ValidNumeric @RequestParam(required = false) Integer status){
 
         List<UF> ufs = new ArrayList<>();
 
@@ -86,6 +88,16 @@ public class UFController {
         }).collect(Collectors.toList());
 
         return ResponseEntity.ok(ufDtos);
+    }
+
+    @DeleteMapping
+    public void desativarUFs(
+            @RequestParam(required = false) String sigla,
+            @RequestParam(required = false) String nome,
+            @Valid @ValidNumeric @RequestParam(required = false) Long codigoUF,
+            @Valid @ValidNumeric @RequestParam(required = false) Integer status){
+
+            ufService.desativarUFs(sigla, nome, codigoUF, status);
     }
 
 }

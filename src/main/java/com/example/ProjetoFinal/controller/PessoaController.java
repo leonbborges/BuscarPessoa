@@ -4,6 +4,7 @@ import com.example.ProjetoFinal.controller.dto.PessoaDto;
 import com.example.ProjetoFinal.controller.dto.PessoasDto.EnderecoRequestDto;
 import com.example.ProjetoFinal.controller.dto.PessoasDto.PessoaRequestDto;
 import com.example.ProjetoFinal.entity.Pessoa;
+import com.example.ProjetoFinal.infra.personalitedException.ValidNumeric;
 import com.example.ProjetoFinal.service.PessoaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,9 @@ public class PessoaController {
 
     @GetMapping
     public ResponseEntity<?> listarMunicipiosFiltrados(
-            @RequestParam(required = false) Long codigoPessoa,
+            @Valid @ValidNumeric @RequestParam(required = false) Long codigoPessoa,
             @RequestParam(required = false) String login,
-            @RequestParam(required = false) Integer status){
+            @Valid @ValidNumeric @RequestParam(required = false) Integer status){
 
         List<Pessoa> pessoas =  new ArrayList<>();
         List<EnderecoRequestDto> enderecos = new ArrayList<>();

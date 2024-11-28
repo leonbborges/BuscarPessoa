@@ -22,14 +22,14 @@ public interface MunicipioRepository extends JpaRepository<Municipio, Long> {
                                           @Param("nome") String nome,
                                           @Param("status") Integer status);
 
+
     @Query("SELECT m FROM Municipio m WHERE " +
             "(:codigoUF IS NULL OR m.uf.codigoUF = :codigoUF) AND " +
             "(:nome IS NULL OR LOWER(m.nome) LIKE LOWER(CONCAT('%', :nome, '%'))) AND " +
             "(:status IS NULL OR m.status = :status)")
-    List<Municipio> searchByParameters(
-            @Param("codigoUF") Long codigoUF,
-            @Param("nome") String nome,
-            @Param("status") Integer status);
+    List<Municipio> searchByParameters(@Param("codigoUF") Long codigoUF,
+                                       @Param("nome") String nome,
+                                       @Param("status") Integer status);
 
 
     Optional<Municipio> findOneByNome(String nome);

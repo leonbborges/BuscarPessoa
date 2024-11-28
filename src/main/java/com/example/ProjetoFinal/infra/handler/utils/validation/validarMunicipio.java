@@ -1,28 +1,27 @@
 package com.example.ProjetoFinal.infra.handler.utils.validation;
 
-import com.example.ProjetoFinal.entity.Municipio;
+import com.example.ProjetoFinal.controller.dto.MunicipioDto;
 import com.example.ProjetoFinal.infra.exception.Municipio.MunicipioNullParamException;
-import com.example.ProjetoFinal.infra.exception.UF.UFNullParamException;
 
 public class validarMunicipio {
 
-    public static void validarEntradaMunicipio(Municipio municipio){
+    public static void validarEntradaMunicipio(MunicipioDto dto){
 
-        if (municipio.getUf().getCodigoUF() == null) {
+        if (dto.getCodigoUF() == null ) {
             throw new MunicipioNullParamException(
                     "Não foi possível incluir Municipio no banco de dados. Motivo: o campo codigoUF não pode ser " +
                             "nulo"
             );
         }
 
-        if (municipio.getNome() == null || municipio.getNome().isEmpty()) {
+        if (dto.getNome() == null || dto.getNome().isEmpty()) {
             throw new MunicipioNullParamException(
                     "Não foi possível incluir o Municipio no banco de dados. Motivo: o campo 'nome' não pode ser " +
                             "nulo ou vazio."
             );
         }
 
-        if (municipio.getStatus() == null) {
+        if (dto.getStatus() == null) {
             throw new MunicipioNullParamException(
                     "Não foi possível incluir Municipio no banco de dados. Motivo: o status 'status' não pode ser " +
                             "nulo ou vazio."
@@ -30,9 +29,9 @@ public class validarMunicipio {
         }
     }
 
-    public static void validarCogigoMunicipio(Municipio municipio){
+    public static void validarCogigoMunicipio(MunicipioDto dto){
 
-        if (municipio.getCodigoMunicipio() == null) {
+        if (dto.getCodigoMunicipio() == null) {
             throw new MunicipioNullParamException(
                     "Não foi possível incluir Municipio no banco de dados. Motivo: o 'codigo Municipio' " +
                             "não pode ser nulo ou vazio."

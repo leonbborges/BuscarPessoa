@@ -20,10 +20,10 @@ public class UFService {
     private UFRepository ufRepository;
 
     public List<UF> salvarUF(UFDto ufDto) {
+
+        validarUF.validarEntradaUF(ufDto);
         UF ufnovo = new UF(ufDto.getSigla(), ufDto.getNome(),
                 ufDto.getStatus());
-
-        validarUF.validarEntradaUF(ufnovo);
 
         ufRepository.findBySigla(ufnovo.getSigla()).ifPresent(existingUF -> {
             throw new UFInsertException(
@@ -35,7 +35,7 @@ public class UFService {
         ufRepository.findByNome(ufnovo.getNome()).ifPresent(existingUF -> {
             throw new UFInsertException(
                     "Não foi possivel incluir nome no banco de dados.Motivo: ja existe um" +
-                    " registro de nome com o nome" + ufDto.getNome() + "cadastrado(a) no banco de dados"
+                    " registro de nome com o nome " + ufDto.getNome() + " cadastrado(a) no banco de dados"
             );
         });
 
@@ -58,14 +58,14 @@ public class UFService {
     }
 
     public List<UF> atualizar(UFDto ufDto){
+        validarUF.validarCogigoUF(ufDto);
+        validarUF.validarEntradaUF(ufDto);
 
         UF ufnovo = new UF(ufDto.getCodigoUF(),
                 ufDto.getSigla(),
                 ufDto.getNome(),
                 ufDto.getStatus());
 
-        validarUF.validarCogigoUF(ufnovo);
-        validarUF.validarEntradaUF(ufnovo);
 
         ufRepository.findBySigla(ufnovo.getSigla()).ifPresent(existingUF -> {
             if (!existingUF.getCodigoUF().equals(ufDto.getCodigoUF())) {
@@ -81,7 +81,7 @@ public class UFService {
             if (!existingUF.getCodigoUF().equals(ufDto.getCodigoUF())) {
                 throw new UFInsertException(
                         "Não foi possivel incluir nome no banco de dados.Motivo: ja existe um" +
-                                " registro de nome com o nome " + ufDto.getNome() + "cadastrado(a) no banco de dados"
+                                " registro de nome com o nome " + ufDto.getNome() + " cadastrado(a) no banco de dados"
                 );
             }
         });
@@ -90,4 +90,12 @@ public class UFService {
 
         return ufRepository.findAll();
     }
+
+    public void desativarUFs(String sigla, String nome, Long codigoUF, Integer status) {
+        UF uf = ufRepository.findOneByCriteria(sigla, nome, codigoUF, status)
+                .orElseThrow(
+                        () -> new NotFoundUFException("[]"));
+        uf.setStatus(2);
+    }
+
 }

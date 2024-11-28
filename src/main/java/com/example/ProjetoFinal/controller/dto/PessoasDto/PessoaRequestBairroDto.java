@@ -9,13 +9,13 @@ public class PessoaRequestBairroDto {
     private Long codigoMunicipio;
     private String nome;
     private Integer status;
-    private PessoaRequestMunicipioDto municipioDto;
+    private PessoaRequestMunicipioDto Municipio;
 
-    public PessoaRequestBairroDto(Long codigoBairro, Long codigoMunicipio, String nome, Integer status, PessoaRequestMunicipioDto municipioDto) {
+    public PessoaRequestBairroDto(Long codigoBairro, Long codigoMunicipio, String nome, Integer status, PessoaRequestMunicipioDto municipio) {
         this.codigoBairro = codigoBairro;
         this.codigoMunicipio = codigoMunicipio;
         this.nome = nome;
         this.status = status;
-        this.municipioDto = municipioDto;
+        Municipio = municipio;
     }
 }

@@ -22,4 +22,7 @@ public interface EnderecoRepository extends JpaRepository<Endereco, Long> {
             @Param("codigoBairro") Long codigoBairro,
             @Param("nomeRua") String nomeRua,
             @Param("numero") String numero);
+
+
+    void deleteByPessoaCodigoPessoa(Long codigoPessoa);
 }
