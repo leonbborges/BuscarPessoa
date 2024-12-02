@@ -82,7 +82,7 @@ public class PessoaController {
     }
 
     @PutMapping
-    public ResponseEntity<List<PessoaRequestDto>> attualizarPessoa(@RequestBody PessoaDto dto) {
+    public ResponseEntity<List<PessoaRequestDto>> attualizarPessoa(@Valid @RequestBody PessoaDto dto) {
 
         List<Pessoa> pessoas = pessoaService.atualizarPessoa(dto);
         List<EnderecoRequestDto> enderecos = new ArrayList<>();

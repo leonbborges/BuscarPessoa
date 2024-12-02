@@ -1,7 +1,7 @@
 package com.example.ProjetoFinal.controller.dto;
 
 import com.example.ProjetoFinal.infra.personalitedException.ValidNumeric;
-import jakarta.validation.constraints.Digits;
+import jakarta.validation.Valid;
 import lombok.Data;
 
 import java.util.List;
@@ -9,6 +9,8 @@ import java.util.List;
 @Data
 public class PessoaDto {
 
+    @Valid
+    @ValidNumeric
     private Long codigoPessoa;
 
     private String nome;

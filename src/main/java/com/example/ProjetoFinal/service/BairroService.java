@@ -56,8 +56,8 @@ public class BairroService {
                 bairro.getNome()).ifPresent(existingBairro -> {
                 throw new BairroInsertException(
                         "Não foi possível incluir Bairro no banco de dados. Motivo: já existe um registro de Bairro " +
-                                "com o nome " + bairro.getNome() + " e o mesmo " + bairro.getMunicipio()
-                                .getCodigoMunicipio() + " cadastrado(a) no banco de dados."
+                                "com o nome " + bairro.getNome() + " e o mesmo codigo Municipio:"
+                                + bairro.getMunicipio().getCodigoMunicipio() + " cadastrado(a) no banco de dados."
                 );
         });
 

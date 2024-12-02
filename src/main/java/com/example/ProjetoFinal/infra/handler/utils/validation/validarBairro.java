@@ -8,7 +8,7 @@ public class validarBairro {
 
         if (dto.getCodigoMunicipio() == null) {
             throw new BairroNullParamException(
-                    "Não foi possível incluir Bairro no banco de dados. Motivo: o campo getCodigo Municipio " +
+                    "Não foi possível incluir Bairro no banco de dados. Motivo: o campo Codigo Municipio " +
                             "não pode ser nulo"
             );
         }

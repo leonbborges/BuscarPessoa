@@ -92,12 +92,9 @@ public class UFController {
 
     @DeleteMapping
     public void desativarUFs(
-            @RequestParam(required = false) String sigla,
-            @RequestParam(required = false) String nome,
-            @Valid @ValidNumeric @RequestParam(required = false) Long codigoUF,
-            @Valid @ValidNumeric @RequestParam(required = false) Integer status){
+            @Valid @ValidNumeric @RequestParam(required = false) Long codigoUF){
 
-            ufService.desativarUFs(sigla, nome, codigoUF, status);
+            ufService.desativarUFs(codigoUF);
     }
 
 }

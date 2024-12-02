@@ -91,11 +91,22 @@ public class UFService {
         return ufRepository.findAll();
     }
 
-    public void desativarUFs(String sigla, String nome, Long codigoUF, Integer status) {
-        UF uf = ufRepository.findOneByCriteria(sigla, nome, codigoUF, status)
+    public void desativarUFs(Long codigoUF) {
+        UF uf = ufRepository.findById(codigoUF)
                 .orElseThrow(
                         () -> new NotFoundUFException("[]"));
-        uf.setStatus(2);
+
+        if(uf.getStatus() == 1){
+            uf.setStatus(2);
+        }
+        else if(uf.getStatus() ==2){
+            throw new UFInsertException("O Valor do Status já 2, por isso não é possivel atera-lo");
+        }
+        else{
+            throw new UFInsertException("O Valor do Status inserido não é um valor valido");
+        }
+
+        ufRepository.save(uf);
     }
 
 }
