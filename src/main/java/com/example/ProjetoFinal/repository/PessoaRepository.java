@@ -25,4 +25,6 @@ public interface PessoaRepository extends JpaRepository<Pessoa, Long> {
                                       @Param("status") Integer status);
 
     Optional<Pessoa> findOneByLogin (String login);
+
+    Optional<Pessoa> findByLogin(String login);
 }

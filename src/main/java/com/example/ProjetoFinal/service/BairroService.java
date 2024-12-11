@@ -44,7 +44,7 @@ public class BairroService {
 
         validarBairro.validarEntradaBairro(bairroDto);
         Municipio municipioRetorno = municipioRepository.findById(bairroDto.getCodigoMunicipio())
-                .orElseThrow(() -> new NotFoundBairroException
+                .orElseThrow(() -> new MunicipioInsertException
                         ("não foi possivel encontrar um Municipio como o " +
                         "codigo disponibilizado"));
 
@@ -72,16 +72,15 @@ public class BairroService {
         validarBairro.validarCogigoMunicipio(bairroDto);
 
         Municipio municipioRetorno = municipioRepository.findById(bairroDto.getCodigoMunicipio())
-                .orElseThrow(() -> new NotFoundMunicipioException("não foi possivel encontrar uma UF como o " +
+                .orElseThrow(() -> new MunicipioInsertException("não foi possivel encontrar uma UF como o " +
                         "codigo disponibilizado"));
 
-        Bairro bairro = new Bairro(bairroDto.getCodigoMunicipio(),
-                municipioRetorno,
-                bairroDto.getNome(),
-                bairroDto.getStatus());
+        Bairro bairro = bairroRepository.findById(bairroDto.getCodigoBairro())
+                .orElseThrow(() -> new BairroInsertException("não foi possivel encontrar um Bairro como o " +
+                        "codigo disponibilizado"));
 
-        bairroRepository.findByMunicipioCodigoMunicipioAndNome(bairro.getMunicipio().getCodigoMunicipio()
-                , bairro.getNome()).ifPresent(existingBairro -> {
+        bairroRepository.findByMunicipioCodigoMunicipioAndNome(bairroDto.getCodigoMunicipio()
+                , bairroDto.getNome()).ifPresent(existingBairro -> {
             if (!existingBairro.getCodigoBairro().equals(bairroDto.getCodigoBairro())) {
                 throw new MunicipioInsertException(
                         "Não foi possível incluir Bairro no banco de dados. Motivo: já existe um registro de Bairro " +
@@ -90,6 +89,10 @@ public class BairroService {
                 );
             }
         });
+
+        bairro.setMunicipio(municipioRetorno);
+        bairro.setNome(bairroDto.getNome());
+        bairro.setStatus(bairroDto.getStatus());
 
         bairroRepository.save(bairro);
 

@@ -1,9 +1,7 @@
 package com.example.ProjetoFinal.infra.handler.utils.validation;
 
 import com.example.ProjetoFinal.controller.dto.EnderecoDto;
-import com.example.ProjetoFinal.controller.dto.PessoaDto;
 import com.example.ProjetoFinal.infra.exception.Endereco.EnderecoNullParamException;
-import com.example.ProjetoFinal.infra.exception.Pessoa.PessoaNullParamException;
 
 public class validarEndereco {
 
@@ -43,15 +41,5 @@ public class validarEndereco {
             );
         }
 
-    }
-
-    public static void validarCodigoEndereco(EnderecoDto dto) {
-
-        if (dto.getCodigoEndereco() == null) {
-            throw new PessoaNullParamException(
-                    "Não foi possível incluir a Endereco no banco de dados. Motivo: o campo 'codigo endereco' " +
-                            "não pode ser nulo ou vazio."
-            );
-        }
     }
 }

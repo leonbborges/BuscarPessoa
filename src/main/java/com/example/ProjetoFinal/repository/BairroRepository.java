@@ -30,5 +30,5 @@ public interface BairroRepository extends JpaRepository<Bairro, Long> {
                                     @Param("nome") String nome,
                                     @Param("status") Integer status);
 
-    Optional<Bairro> findByMunicipioCodigoMunicipioAndNome(Long codigoBairro, String nome);
+    Optional<Bairro> findByMunicipioCodigoMunicipioAndNome(Long codigoMunicipio, String nome);
 }

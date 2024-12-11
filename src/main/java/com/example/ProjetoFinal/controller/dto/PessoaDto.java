@@ -9,8 +9,6 @@ import java.util.List;
 @Data
 public class PessoaDto {
 
-    @Valid
-    @ValidNumeric
     private Long codigoPessoa;
 
     private String nome;

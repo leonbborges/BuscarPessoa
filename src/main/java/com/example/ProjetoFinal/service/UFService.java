@@ -61,23 +61,24 @@ public class UFService {
         validarUF.validarCogigoUF(ufDto);
         validarUF.validarEntradaUF(ufDto);
 
-        UF ufnovo = new UF(ufDto.getCodigoUF(),
-                ufDto.getSigla(),
-                ufDto.getNome(),
-                ufDto.getStatus());
+        UF ufnovo = ufRepository.findById(ufDto.getCodigoUF())
+                .orElseThrow(() -> new UFInsertException(
+                        "Não foi possível atualizar a UF. Motivo: o registro com o código "
+                                + ufDto.getCodigoUF() + " não foi encontrado no banco de dados."
+                ));
 
 
-        ufRepository.findBySigla(ufnovo.getSigla()).ifPresent(existingUF -> {
+        ufRepository.findBySigla(ufDto.getSigla()).ifPresent(existingUF -> {
             if (!existingUF.getCodigoUF().equals(ufDto.getCodigoUF())) {
                 throw new UFInsertException(
                         "Não foi possível incluir UF no banco de dados. Motivo: já existe um registro de UF com a sigla " +
-                                ufnovo.getSigla() + " cadastrado(a) no banco de dados."
+                                ufDto.getSigla() + " cadastrado(a) no banco de dados."
                 );
 
             }
         });
 
-        ufRepository.findByNome(ufnovo.getNome()).ifPresent(existingUF -> {
+        ufRepository.findByNome(ufDto.getNome()).ifPresent(existingUF -> {
             if (!existingUF.getCodigoUF().equals(ufDto.getCodigoUF())) {
                 throw new UFInsertException(
                         "Não foi possivel incluir nome no banco de dados.Motivo: ja existe um" +
@@ -85,6 +86,10 @@ public class UFService {
                 );
             }
         });
+
+        ufnovo.setNome(ufDto.getNome());
+        ufnovo.setSigla(ufDto.getSigla());
+        ufnovo.setStatus(ufDto.getStatus());
 
         ufRepository.save(ufnovo);
 

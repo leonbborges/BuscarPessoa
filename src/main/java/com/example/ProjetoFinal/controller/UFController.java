@@ -2,6 +2,7 @@ package com.example.ProjetoFinal.controller;
 
 import com.example.ProjetoFinal.controller.dto.UFDto;
 import com.example.ProjetoFinal.entity.UF;
+import com.example.ProjetoFinal.infra.handler.utils.validation.ValidarRequest;
 import com.example.ProjetoFinal.infra.personalitedException.ValidNumeric;
 import com.example.ProjetoFinal.service.UFService;
 import jakarta.validation.Valid;
@@ -21,7 +22,7 @@ public class UFController {
     private UFService ufService;
 
     @PostMapping
-    public ResponseEntity<List<UFDto>> salvarUF(@RequestBody UFDto ufDto) {
+    public ResponseEntity<List<UFDto>> salvarUF(@Valid @RequestBody UFDto ufDto) {
 
         List<UF> ufs = ufService.salvarUF(ufDto);
 
@@ -75,7 +76,7 @@ public class UFController {
     }
 
     @PutMapping
-    public ResponseEntity<List<UFDto>> atualizarUF(@RequestBody UFDto ufDto) {
+    public ResponseEntity<List<UFDto>> atualizarUF(@RequestBody @Valid UFDto ufDto) {
 
         List<UF> ufs = ufService.atualizar(ufDto);
 

@@ -14,12 +14,22 @@ import com.example.ProjetoFinal.infra.exception.UF.NotFoundUFException;
 import com.example.ProjetoFinal.infra.exception.UF.UFInsertException;
 import com.example.ProjetoFinal.infra.exception.UF.UFNullParamException;
 import com.example.ProjetoFinal.infra.message.RestErroMessage;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
@@ -108,4 +118,28 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         RestErroMessage errorResponse = new RestErroMessage(message, HttpStatus.BAD_REQUEST.value());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(
+            HttpMessageNotReadableException ex,
+            HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request) {
+
+        String message = "Erro de validação no corpo da requisição.";
+
+        if (ex.getCause() instanceof InvalidFormatException invalidFormatException) {
+            if (!invalidFormatException.getPath().isEmpty()) {
+                String fieldName = invalidFormatException.getPath().get(0).getFieldName();
+                message = String.format("O parâmetro '%s' deve ser um valor numérico.", fieldName);
+            }
+        }
+
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("message", message);
+        errorResponse.put("status", status.value());
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
 }

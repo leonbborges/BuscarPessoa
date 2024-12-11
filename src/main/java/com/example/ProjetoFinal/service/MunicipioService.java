@@ -6,7 +6,7 @@ import com.example.ProjetoFinal.entity.UF;
 import com.example.ProjetoFinal.infra.exception.Municipio.MunicipioInsertException;
 import com.example.ProjetoFinal.infra.exception.Municipio.NotFoundMunicipioException;
 import com.example.ProjetoFinal.infra.exception.UF.NotFoundUFException;
-import com.example.ProjetoFinal.infra.exception.UF.UFNullParamException;
+import com.example.ProjetoFinal.infra.exception.UF.UFInsertException;
 import com.example.ProjetoFinal.infra.handler.utils.validation.validarMunicipio;
 import com.example.ProjetoFinal.repository.MunicipioRepository;
 import com.example.ProjetoFinal.repository.UFRepository;
@@ -45,7 +45,7 @@ public class MunicipioService {
         validarMunicipio.validarEntradaMunicipio(mDto);
 
         UF ufRetorno = ufRepository.findById(mDto.getCodigoUF())
-                .orElseThrow(() -> new NotFoundUFException("não foi possivel encontrar uma UF como o " +
+                .orElseThrow(() -> new UFInsertException("não foi possivel encontrar uma UF como o " +
                         "codigo disponibilizado"));
 
         Municipio municipio = new Municipio(ufRetorno,
@@ -71,23 +71,27 @@ public class MunicipioService {
         validarMunicipio.validarCogigoMunicipio(mDto);
 
         UF ufRetorno = ufRepository.findById(mDto.getCodigoUF())
-                .orElseThrow(() -> new UFNullParamException("não foi possivel encontrar uma UF como o " +
+                .orElseThrow(() -> new UFInsertException("não foi possivel encontrar uma UF como o " +
                         "codigo disponibilizado"));
 
-        Municipio municipio = new Municipio(mDto.getCodigoMunicipio(),
-                ufRetorno,
-                mDto.getNome(),
-                mDto.getStatus());
+
+        Municipio municipio = municipioRepository.findById(mDto.getCodigoMunicipio())
+                .orElseThrow(() -> new MunicipioInsertException("não foi possivel encontrar um Municipio como o " +
+                        "codigo disponibilizado"));
 
 
         municipioRepository.findOneByNome(municipio.getNome()).ifPresent(existingMunicipio -> {
             if (!existingMunicipio.getCodigoMunicipio().equals(mDto.getCodigoUF())) {
             throw new MunicipioInsertException(
                     "Não foi possível incluir Municipio no banco de dados. Motivo: já existe um registro de Municipio " +
-                            "com o nome" + municipio.getNome() + " cadastrado(a) no banco de dados."
+                            "com o nome " + municipio.getNome() + " cadastrado(a) no banco de dados."
             );
             }
         });
+
+        municipio.setUf(ufRetorno);
+        municipio.setNome(mDto.getNome());
+        municipio.setStatus(mDto.getStatus());
 
         municipioRepository.save(municipio);
 
